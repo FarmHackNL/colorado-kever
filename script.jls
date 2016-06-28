@@ -1,0 +1,16 @@
+lread rgb coloradokever_rgb.jl
+FastRGBtoHSV rgb hsv
+ThresholdHSVChannels hsv bin Int16Image 13 31 83 255 150 255
+RemoveBlobs bin EightConnected Area 1 8 UseX
+$nrBlobs = LabelBlobs bin EightConnected
+$maxBlob = BlobAnalysisArray bin &$tab NoSort Area UseY CentreOfGravity
+for $i = 0 to $maxBlob do
+  VarToArray &$tab[$i] &$elm
+  $cc = $elm[1]
+  $x = GetNthFromVector 1 $cc
+  $x = Round $x
+  $y = GetNthFromVector 2 $cc
+  $y = Round $y
+  CircleShape rgb $x $y 20 (255,0,0) KeepOriginal    
+endfor
+Display rgb
